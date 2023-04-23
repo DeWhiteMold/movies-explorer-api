@@ -9,10 +9,10 @@ module.exports.getMovies = (req, res, next) => {
 };
 
 module.exports.createMovie = (req, res, next) => {
-  const { country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId } = req.body;
+  const { country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId } = req.body;
   const owner = req.user._id;
   Movie.create({ 
-    country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId, owner 
+    country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId, owner 
   })
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
@@ -25,10 +25,10 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findByIdAndRemove(req.params.cardId)
+  Movie.findByIdAndRemove(req.params.movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFound('Фильм с указанным _id не найден');
+        throw new NotFound('Фильм с указанным id не найден');
       } else {
         res.status(200).send({ data: movie})
       }

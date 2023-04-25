@@ -5,7 +5,7 @@ const { getMovies, createMovie, deleteMovie } = require('../controllers/movies')
 router.get('/', getMovies);
 router.post('/', celebrate({
   body: Joi.object().keys({
-    nameRU: Joi.string().required().regex(/[^a-zа-яА-ЯёЁ -]/iu),
+    nameRU: Joi.string().required().regex(/^[a-zа-яё ]/iu),
     nameEN: Joi.string().required().regex(/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/i),
     country: Joi.string().required(),
     director: Joi.string().required(),

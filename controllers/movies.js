@@ -25,12 +25,33 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findByIdAndRemove(req.params.movieId)
+  // Movie.findByIdAndRemove(req.params.movieId)
+  //   .then((movie) => {
+  //     if (!movie) {
+  //       throw new NotFound('Фильм с указанным id не найден');
+  //     } else {
+  //       res.status(200).send({ data: movie})
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     if (err.name === 'CastError') {
+  //       next(new BadRequest('Переданы некорректные данные'));
+  //     } else {
+  //       next(err);
+  //     }
+  //   });
+  Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
         throw new NotFound('Фильм с указанным id не найден');
+      } else if (movie.owner.toString() !== req.user._id) {
+        throw new Forbidden('Вы не можете удалить этот фильм');
       } else {
-        res.status(200).send({ data: movie})
+        movie.deleteOne()
+          .then(() => {
+            res.status(200).send({ data: movie });
+          })
+          .catch(next);
       }
     })
     .catch((err) => {

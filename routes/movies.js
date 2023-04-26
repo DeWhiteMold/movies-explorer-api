@@ -17,7 +17,7 @@ router.post('/', celebrate({
     thumbnail: Joi.string().required().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
     owner: Joi.string().hex().length(24),
     movieId: Joi.string().hex().length(24),
-  })
+  }),
 }), createMovie);
 router.delete('/:movieId', celebrate({
   params: Joi.object().keys({

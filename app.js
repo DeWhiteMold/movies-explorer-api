@@ -8,12 +8,12 @@ const NotFound = require('./errors/NotFound');
 require('dotenv').config();
 
 const app = express();
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, DB_PORT } = process.env;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/dfilmsbd');
+mongoose.connect(NODE_ENV === 'production' ? DB_PORT : 'mongodb://127.0.0.1:27017/dfilmsbd');
 
 app.use(requestLogger);
 

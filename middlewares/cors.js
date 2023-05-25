@@ -3,6 +3,8 @@ const allowedCors = [
   'http://praktikum.tk',
   'http://localhost:3000',
   'https://localhost:3000',
+  'http://dewhitefilms.nomoredomains.rocks',
+  'https://dewhitefilms.nomoredomains.rocks',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';

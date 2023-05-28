@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const BadRequest = require('../errors/BadRequest');
 const NotFound = require('../errors/NotFound');
-const AlreadyExist = require('../errors/AlreadyExist');
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -23,27 +22,19 @@ module.exports.getCurrentUser = (req, res, next) => {
 
 module.exports.updateUser = (req, res, next) => {
   const { name, email } = req.body;
-  User.findOne({ email })
-    .then((userWithEmail) => {
-      if (userWithEmail) {
-        next(new AlreadyExist('Пользователь с данным email уже существует'));
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, email },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
+    .then((user) => {
+      if (!user) {
+        throw new NotFound('Пользователь с указанным _id не найден');
       } else {
-        User.findByIdAndUpdate(
-          req.user._id,
-          { name, email },
-          {
-            new: true,
-            runValidators: true,
-          },
-        )
-          .then((user) => {
-            if (!user) {
-              throw new NotFound('Пользователь с указанным _id не найден');
-            } else {
-              res.send({ data: user });
-            }
-          })
-          .catch(next);
+        res.send({ data: user });
       }
     })
     .catch((err) => {
